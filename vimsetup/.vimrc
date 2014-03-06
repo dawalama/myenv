@@ -21,6 +21,7 @@ set showmatch
 au WinLeave * set nocursorline nocursorcolumn
 au WinEnter * set cursorline cursorcolumn
 set cursorcolumn
+set cursorline
 
 "# Behavior 
 set tabstop=4
