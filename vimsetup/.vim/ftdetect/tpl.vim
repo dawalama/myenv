@@ -1,1 +1,1 @@
-au BufRead,BufNewFile *.tpl        set filetype=html
+au BufRead,BufNewFile *.tpl  set filetype=html

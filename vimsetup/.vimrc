@@ -1,10 +1,18 @@
-call pathogen#infect()
+" turn filetype detection off and, even if it's not strictly
+" " necessary, disable loading of indent scripts and filetype plugins
+filetype off
+filetype plugin indent off
 
-"pathogen#helptags() # command-t
+call pathogen#infect()
+call pathogen#helptags()
+
+filetype plugin indent on
+syntax on
+
+set nocompatible            "Prefents VIM from being nerfed into acting like VI
 
 let mapleader=","           "Changes Leader key into a comma instead of a backslash
 
-set nocompatible            "Prefents VIM from being nerfed into acting like VI
 set history=2000
 
 
@@ -54,9 +62,7 @@ set whichwrap+=<,>,h,l
 "Remove trailing whitespaces
 map <Leader>, :%s/\s\+$//<CR>i
 
-syntax on
-filetype plugin indent on
-
+let g:html_indent_inctags = "html,body,head,tbody,div,script"
 
 if filereadable($HOME.'/.vimrc_local')
     source $HOME/.vimrc_local

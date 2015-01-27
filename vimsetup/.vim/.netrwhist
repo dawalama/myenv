@@ -1,0 +1,10 @@
+let g:netrw_dirhistmax  =10
+let g:netrw_dirhist_cnt =8
+let g:netrw_dirhist_1='/Users/dawa/blopdev/blopboard-www/app/public/app/views/explora'
+let g:netrw_dirhist_2='/Users/dawa/blopdev/blopboard-www/app/public/app/utils'
+let g:netrw_dirhist_3='/Users/dawa/blopdev/blopboard-www/app/public/app'
+let g:netrw_dirhist_4='/Users/dawa/blopdev/blopboard-www/app/public/app/utils'
+let g:netrw_dirhist_5='/Users/dawa/blopdev/blopboard-www/app/public/app'
+let g:netrw_dirhist_6='/Users/dawa/blopdev/blopboard-www/app/public'
+let g:netrw_dirhist_7='/Users/dawa/blopdev/blopboard-api/app/public'
+let g:netrw_dirhist_8='/Users/dawa/blopdev/blopboard-www/app/public/app'
