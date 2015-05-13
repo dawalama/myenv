@@ -62,6 +62,8 @@ set whichwrap+=<,>,h,l
 "Remove trailing whitespaces
 map <Leader>, :%s/\s\+$//<CR>i
 
+let g:EditorConfig_exclude_patterns = ['fugitive://.*']
+
 let g:html_indent_inctags = "html,body,head,tbody,div,script"
 
 if filereadable($HOME.'/.vimrc_local')
