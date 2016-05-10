@@ -12,6 +12,7 @@ syntax on
 set nocompatible            "Prefents VIM from being nerfed into acting like VI
 
 let mapleader=","           "Changes Leader key into a comma instead of a backslash
+let python_highlight_all = 1
 
 set history=2000
 
