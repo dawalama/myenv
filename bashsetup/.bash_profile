@@ -8,7 +8,9 @@ shopt -s histappend
 alias ll="ls -la"
 
 # Run twolfson/sexy-bash-prompt
-. ~/.bash_prompt
+source ~/.bash-git-prompt/gitprompt.sh
+GIT_PROMPT_ONLY_IN_REPO=1
+
 
 if which pyenv > /dev/null; then 
     eval "$(pyenv init -)"; 
