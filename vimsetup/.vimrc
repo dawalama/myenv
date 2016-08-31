@@ -9,6 +9,7 @@ call pathogen#helptags()
 filetype plugin indent on
 syntax on
 
+colorscheme elflord
 set nocompatible            "Prefents VIM from being nerfed into acting like VI
 
 let mapleader=","           "Changes Leader key into a comma instead of a backslash
