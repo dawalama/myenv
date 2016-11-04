@@ -7,19 +7,32 @@ This is an [EditorConfig][] plugin for Vim. This plugin could be found on both
 
 ## Installation
 
-There are two ways for installation:
+If your Vim is not compiled with `+python` feature (You can verify if the
+`+python` feature is included by running `:ver`.  Most Linux distributions and
+with the official Windows binary have the `+python` feature enabled), please
+first download the [EditorConfig core][] and follow the instructions in the
+README and INSTALL files to install it. This plugin would NOT work if neither
+`+python` nor EditorConfig core is available.
 
-- If your Vim is compiled with `+python` feature (this is usually true on most
-  Linux distributions and with the main Windows binary installers), 
-  the most simple way to install this plugin is to 
-  download the archive and extract it into your Vim runtime directory (`~/.vim`
-  on UNIX/Linux and `$VIM_INSTALLATION_FOLDER\vimfiles` on windows).
-  You can verify if the `+python` feature is included by running `:ver`.
+To install this plugin, you can use one of the following ways:
 
-- If your Vim is not compiled with `+python` feature, please first download the
-  [EditorConfig core][] and follow the instructions in the README and INSTALL
-  files to install it. This plugin would NOT work if neither `+python` nor
-  EditorConfig core is available.
+- Download the [archive][] and extract it into your Vim runtime directory
+  (`~/.vim` on UNIX/Linux and `$VIM_INSTALLATION_FOLDER\vimfiles` on windows).
+  You should have 3 sub-directories in this runtime directory now: "autoload",
+  "doc" and "plugin".
+
+OR
+
+- Use [pathogen][] (the git repository of this plugin is
+  https://github.com/editorconfig/editorconfig-vim.git)
+
+OR
+
+- Use [Vundle][] by adding to your `.vimrc` Vundle plugins section:
+
+        Plugin 'editorconfig/editorconfig-vim'
+
+  Then remember to call `:PluginInstall`.
 
 
 ## Supported properties
@@ -31,14 +44,14 @@ The EditorConfig Vim plugin supports the following EditorConfig [properties][]:
 * `tab_width`
 * `end_of_line`
 * `charset`
-* `insert_final_newline` ([PreserveNoEOL][] is required for this property)
+* `insert_final_newline` (Feature +fixendofline (available on Vim 7.4.785+) or [PreserveNoEOL][] is required for this property)
 * `trim_trailing_whitespace`
 * `max_line_length`
 * `root` (only used by EditorConfig core)
 
 ## Recommended Options
 
-All of the options which are supported are documented in [editorConfig.txt][]
+All of the options which are supported are documented in [editorconfig.txt][]
 and can be viewed by executing the following: `:help editorconfig`.
 
 #### Excluded patterns.
@@ -65,14 +78,19 @@ your |vimrc| like this:
 
 ## Bugs and Feature Requests
 
-Feel free to submit bugs, feature requests, and other issues to the main 
-[EditorConfig issue tracker][].
+Feel free to submit bugs, feature requests, and other issues to the
+[issue tracker][]. Be sure you have read the [contribution guideline][]!
 
-[EditorConfig]: http://editorconfig.org
 [EditorConfig core]: https://github.com/editorconfig/editorconfig-core
+[EditorConfig]: http://editorconfig.org
 [GitHub]: https://github.com/editorconfig/editorconfig-vim
-[properties]: http://github.com/editorconfig/editorconfig/wiki/EditorConfig-Properties
-[Vim online]: http://www.vim.org/scripts/script.php?script_id=3934
-[EditorConfig issue tracker]: https://github.com/editorconfig/editorconfig/issues
 [PreserveNoEOL]: http://www.vim.org/scripts/script.php?script_id=4550
 [Tim Pope's fugitive]: https://github.com/tpope/vim-fugitive
+[Vim online]: http://www.vim.org/scripts/script.php?script_id=3934
+[Vundle]: https://github.com/gmarik/Vundle.vim
+[archive]: https://github.com/editorconfig/editorconfig-vim/archive/master.zip
+[contribution guideline]: https://github.com/editorconfig/editorconfig/blob/master/CONTRIBUTING.md#submitting-an-issue
+[issue tracker]: https://github.com/editorconfig/editorconfig-vim/issues
+[pathogen]: https://github.com/tpope/vim-pathogen
+[properties]: http://github.com/editorconfig/editorconfig/wiki/EditorConfig-Properties
+[editorconfig.txt]: https://github.com/editorconfig/editorconfig-vim/blob/master/doc/editorconfig.txt
