@@ -26,6 +26,9 @@ function echoc() {
 
 function get_theme() {
   local CUSTOM_THEME_FILE="${HOME}/.git-prompt-colors.sh"
+  if [[ ! (-z ${GIT_PROMPT_THEME_FILE} ) ]]; then
+    CUSTOM_THEME_FILE=$GIT_PROMPT_THEME_FILE
+  fi
   local DEFAULT_THEME_FILE="${__GIT_PROMPT_DIR}/themes/Default.bgptheme"
 
   if [[ -z ${GIT_PROMPT_THEME} ]]; then
@@ -66,6 +69,15 @@ function get_theme() {
   fi
 }
 
+function git_prompt_load_colors() {
+  if gp_set_file_var __PROMPT_COLORS_FILE prompt-colors.sh ; then
+    # outsource the color defs
+    source "$__PROMPT_COLORS_FILE"
+  else
+    echo 1>&2 "Cannot find prompt-colors.sh!"
+  fi
+}
+
 function git_prompt_load_theme() {
   get_theme
   local DEFAULT_THEME_FILE="${__GIT_PROMPT_DIR}/themes/Default.bgptheme"
@@ -74,6 +86,7 @@ function git_prompt_load_theme() {
 }
 
 function git_prompt_list_themes() {
+  git_prompt_load_colors
   git_prompt_dir
   get_theme
 
@@ -207,11 +220,7 @@ function git_prompt_config() {
   #  prompt-colors.sh -- sets generic color names suitable for bash 'PS1' prompt
   #  git-prompt-colors.sh -- sets the GIT_PROMPT color scheme, using names from prompt-colors.sh
 
-  if gp_set_file_var __PROMPT_COLORS_FILE prompt-colors.sh ; then
-    source "$__PROMPT_COLORS_FILE"        # outsource the color defs
-  else
-    echo 1>&2 "Cannot find prompt-colors.sh!"
-  fi
+  git_prompt_load_colors
 
   # source the user's ~/.git-prompt-colors.sh file, or the one that should be
   # sitting in the same directory as this script
@@ -322,7 +331,7 @@ function setGitPrompt() {
 
   git_prompt_config
 
-  if [[ ! -e "$repo" ]]; then
+  if [[ ! -e "$repo" ]] || [[ "$GIT_PROMPT_DISABLE" = 1 ]]; then
     PS1="$EMPTY_PROMPT"
     return
   fi
@@ -428,6 +437,20 @@ function replaceSymbols() {
   echo ${VALUE2//_PREHASH_/${GIT_PROMPT_SYMBOLS_PREHASH}}
 }
 
+function createPrivateIndex {
+  # Create a copy of the index to avoid conflicts with parallel git commands, e.g. git rebase.
+  local __GIT_INDEX_FILE
+  local __GIT_INDEX_PRIVATE
+  if [[ -z "$GIT_INDEX_FILE" ]]; then
+    __GIT_INDEX_FILE="$(git rev-parse --git-dir)/index"
+  else
+    __GIT_INDEX_FILE="$GIT_INDEX_FILE"
+  fi
+  __GIT_INDEX_PRIVATE="/tmp/git-index-private$$"
+  command cp "$__GIT_INDEX_FILE" "$__GIT_INDEX_PRIVATE" 2>/dev/null
+  echo "$__GIT_INDEX_PRIVATE"
+}
+
 function updatePrompt() {
   local LAST_COMMAND_INDICATOR
   local PROMPT_LEADING_SPACE
@@ -446,6 +469,17 @@ function updatePrompt() {
   else
     export __GIT_PROMPT_SHOW_UNTRACKED_FILES=${GIT_PROMPT_SHOW_UNTRACKED_FILES}
   fi
+
+  if [ -z "${GIT_PROMPT_SHOW_CHANGED_FILES_COUNT}" ]; then
+    export __GIT_PROMPT_SHOW_CHANGED_FILES_COUNT=1
+  else
+    export __GIT_PROMPT_SHOW_CHANGED_FILES_COUNT=${GIT_PROMPT_SHOW_CHANGED_FILES_COUNT}
+  fi
+
+  local GIT_INDEX_PRIVATE="$(createPrivateIndex)"
+  #important to define GIT_INDEX_FILE as local: This way it only affects this function (and below) - even with the export afterwards
+  local GIT_INDEX_FILE
+  export GIT_INDEX_FILE="$GIT_INDEX_PRIVATE"
 
   local -a git_status_fields
   git_status_fields=($("$__GIT_STATUS_CMD" 2>/dev/null))
@@ -485,7 +519,7 @@ function updatePrompt() {
         v="\$GIT_$1 $2"
       fi
       if eval "test $v" ; then
-        if [[ $# -lt 2 || "$3" != '-' ]]; then
+        if [[ $# -lt 2 || "$3" != '-' ]] && [[ "x$__GIT_PROMPT_SHOW_CHANGED_FILES_COUNT" == "x1" || "x$1" == "xREMOTE" ]]; then
           __add_status "\$GIT_PROMPT_$1\$GIT_$1\$ResetColor"
         else
           __add_status "\$GIT_PROMPT_$1\$ResetColor"
@@ -519,6 +553,7 @@ function updatePrompt() {
   fi
 
   PS1="${NEW_PROMPT//_LAST_COMMAND_INDICATOR_/${LAST_COMMAND_INDICATOR}${ResetColor}}"
+  command rm "$GIT_INDEX_PRIVATE" 2>/dev/null
 }
 
 # Helper function that returns virtual env information to be set in prompt
@@ -558,6 +593,16 @@ function gp_set_window_title {
 }
 
 function prompt_callback_default {
+  return
+}
+
+# toggle gitprompt
+function git_prompt_toggle() {
+  if [[ "$GIT_PROMPT_DISABLE" = 1 ]]; then
+    GIT_PROMPT_DISABLE=0
+  else
+    GIT_PROMPT_DISABLE=1
+  fi
   return
 }
 

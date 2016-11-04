@@ -111,8 +111,8 @@ git clone https://github.com/magicmonty/bash-git-prompt.git .bash-git-prompt --d
 
 Add to the `~/.bashrc`:
 ```
-  source ~/.bash-git-prompt/gitprompt.sh
   GIT_PROMPT_ONLY_IN_REPO=1
+  source ~/.bash-git-prompt/gitprompt.sh
 ```
 
 ### All configs for .bashrc
@@ -126,6 +126,8 @@ Add to the `~/.bashrc`:
 
    # GIT_PROMPT_SHOW_UPSTREAM=1 # uncomment to show upstream tracking branch
    # GIT_PROMPT_SHOW_UNTRACKED_FILES=all # can be no, normal or all; determines counting of untracked files
+   
+   # GIT_PROMPT_SHOW_CHANGED_FILES_COUNT=0 # uncomment to avoid printing the number of changed files
 
    # GIT_PROMPT_STATUS_COMMAND=gitstatus_pre-1.7.10.sh # uncomment to support Git older than 1.7.10
 
@@ -133,7 +135,8 @@ Add to the `~/.bashrc`:
    # GIT_PROMPT_END=...      # uncomment for custom prompt end sequence
 
    # as last entry source the gitprompt script
-   # GIT_PROMPT_THEME=Custom # use custom .git-prompt-colors.sh
+   # GIT_PROMPT_THEME=Custom # use custom theme specified in file GIT_PROMPT_THEME_FILE (default ~/.git-prompt-colors.sh)
+   # GIT_PROMPT_THEME_FILE=~/.git-prompt-colors.sh
    # GIT_PROMPT_THEME=Solarized # use theme optimized for solarized color scheme
    source ~/.bash-git-prompt/gitprompt.sh
 ```
@@ -162,6 +165,15 @@ You can display a list of available themes with `git_prompt_list_themes` (the cu
 
 **If you omit the `GIT_PROMPT_THEME` variable, the Default theme is used or, if you have a custom `.git-prompt-colors.sh`
 in your home directory, then the Custom theme is used.**
+
+##### Ubuntu Themes
+
+Ubuntu requires a bit more spacing for some characters so it has its own themes.
+
+These can be listed with `git_prompt_list_themes`:
+```sh
+git_prompt_list_themes | grep Ubuntu
+```
 
 ##### Theme structure
 
@@ -264,6 +276,13 @@ GIT_PROMPT_COMMAND_FAIL="${Red}✘-_LAST_COMMAND_STATE_ " # displays as ✘-1 fo
 ```sh
 git_prompt_reset
 ```
+
+- You can disable/enable gitprompt by runnning:
+
+```sh
+git_prompt_toggle
+```
+
 
 **Enjoy!**
 
