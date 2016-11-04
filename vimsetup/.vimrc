@@ -19,6 +19,7 @@ set history=2000
 
 
 "# Visual Options
+set laststatus=2
 set wildmenu
 set wildignore=.svn,CVS,.git,*.o,*.a,*.class,*.mo,*.la,*.so,*.obj,*.swp,*.jpg,*.png,*.xpm,*.gif
 
