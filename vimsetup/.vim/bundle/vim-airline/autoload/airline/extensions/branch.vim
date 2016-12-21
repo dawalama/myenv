@@ -185,7 +185,7 @@ function! s:update_untracked()
       " doesn't happen often in practice, so we let it be.
       call s:get_vcs_untracked_async(l:config, l:file)
     else
-      let output = system(l:config.cmd . shellescape(l:file))
+      let output = airline#util#system(l:config.cmd . shellescape(l:file))
       if output =~? ('^' . l:config.untracked_mark)
         let l:config.untracked[l:file] = get(g:, 'airline#extensions#branch#notexists', g:airline_symbols.notexists)
       else
@@ -341,7 +341,7 @@ function! airline#extensions#branch#get_head()
 endfunction
 
 function! s:check_in_path()
-  if !exists('b:airline_branch_path')
+  if !exists('b:airline_file_in_root')
     let root = get(b:, 'git_dir', get(b:, 'mercurial_dir', ''))
     let bufferpath = resolve(fnamemodify(expand('%'), ':p'))
 
@@ -351,7 +351,13 @@ function! s:check_in_path()
         let root = expand(fnamemodify(root, ':h'))
       else
         " else it's the newer format, and we need to guesstimate
-        let pattern = '\.git\(\\\|\/\)modules\(\\\|\/\)'
+        " 1) check for worktrees
+        if match(root, 'worktrees') > -1
+          " worktree can be anywhere, so simply assume true here
+          return 1
+        endif
+        " 2) check for submodules
+        let pattern = '\.git[\\/]\(modules\)[\\/]'
         if match(root, pattern) >= 0
           let root = substitute(root, pattern, '', '')
         endif
@@ -365,7 +371,7 @@ endfunction
 
 function! s:reset_untracked_cache(shellcmdpost)
   " shellcmdpost - whether function was called as a result of ShellCmdPost hook
-  if !s:has_async
+  if !s:has_async && !has('nvim')
     if a:shellcmdpost
       " Clear cache only if there was no error or the script uses an
       " asynchronous interface. Otherwise, cache clearing would overwrite
